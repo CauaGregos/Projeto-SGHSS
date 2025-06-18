@@ -3,6 +3,7 @@ package com.example.vidaplus.controllers;
 import com.example.vidaplus.domain.consulta.Consulta;
 import com.example.vidaplus.domain.consulta.ConsultaRequestDTO;
 import com.example.vidaplus.domain.consulta.ConsultaResponseDTO;
+import com.example.vidaplus.domain.exception.RequisicaoInvalidaException;
 import com.example.vidaplus.domain.paciente.Paciente;
 import com.example.vidaplus.domain.profissional.ProfissionalSaude;
 import com.example.vidaplus.domain.user.User;
@@ -42,10 +43,10 @@ public class ConsultaController {
         String username = userDetails.getUsername();
 
         Paciente paciente = pacienteRepository.findById(dto.paciente_id())
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+                .orElseThrow(() -> new RequisicaoInvalidaException("Paciente não encontrado"));
 
         ProfissionalSaude profissional = profissionalRepository.findById(dto.profissional_id())
-                .orElseThrow(() -> new RuntimeException("Profissional não encontrado"));
+                .orElseThrow(() -> new RequisicaoInvalidaException("Profissional não encontrado"));
 
         Consulta consulta = new Consulta(paciente, profissional);
         repository.save(consulta);
@@ -60,6 +61,9 @@ public class ConsultaController {
         User userDetails = (User) authentication.getPrincipal();
         String username = userDetails.getUsername();
 
+        Consulta consulta = repository.findById(id)
+                .orElseThrow(() -> new RequisicaoInvalidaException("Consulta não localizada."));
+
         repository.deleteById(id);
         logger.info("Usuario {} deletou uma consulta cuja id é {}", username, id);
         return ResponseEntity.noContent().build();
@@ -67,8 +71,9 @@ public class ConsultaController {
 
     @GetMapping("/pacientes/{id}/consultas")
     public ResponseEntity<List<ConsultaResponseDTO>> listarConsultasPorPaciente(@PathVariable Long id) {
-        Optional<Consulta> consultas = repository.findById(id);
-        List<ConsultaResponseDTO> dtos = consultas.stream().map(ConsultaResponseDTO::new).toList();
+        Paciente paciente = pacienteRepository.findById(id)
+                .orElseThrow(() -> new RequisicaoInvalidaException("Paciente não encontrado"));
+        List<ConsultaResponseDTO> dtos = paciente.getConsultas().stream().map(ConsultaResponseDTO::new).toList();
         return ResponseEntity.ok(dtos);
     }
 }

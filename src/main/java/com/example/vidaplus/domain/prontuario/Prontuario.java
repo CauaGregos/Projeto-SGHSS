@@ -59,8 +59,9 @@ public class Prontuario {
         this.dataRegistro = dto.dataRegistro();
     }
 
-    public Prontuario(ProntuarioRequestDTO dto) {
+    public Prontuario(ProntuarioRequestDTO dto, Consulta consulta) {
         this.observacoes = dto.observacoes();
         this.dataRegistro = dto.dataRegistro();
+        this.consulta = consulta;
     }
 }

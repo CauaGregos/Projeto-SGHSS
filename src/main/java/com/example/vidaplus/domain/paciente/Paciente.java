@@ -37,12 +37,13 @@ public class Paciente {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Paciente(PacienteRequestDTO dto) {
+    public Paciente(PacienteRequestDTO dto, User user) {
         this.nome = dto.nome();
         this.cpf = dto.cpf();
         this.dataNascimento = dto.dataNascimento();
         this.telefone = dto.telefone();
         this.email = dto.email();
+        this.user = user;
     }
 
     public Long getId() {
@@ -91,5 +92,9 @@ public class Paciente {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Consulta> getConsultas() {
+        return consultas;
     }
 }

@@ -26,10 +26,11 @@ public class Prescricao {
     @JoinColumn(name = "consulta_id")
     private Consulta consulta;
 
-    public Prescricao(PrescricaoRequestDTO dto) {
+    public Prescricao(PrescricaoRequestDTO dto, Consulta consulta) {
         this.medicamento = dto.medicamento();
         this.dosagem = dto.dosagem();
         this.data = dto.data();
+        this.consulta = consulta;
     }
 
     public Long getId() {

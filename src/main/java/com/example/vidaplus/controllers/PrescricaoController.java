@@ -1,8 +1,11 @@
 package com.example.vidaplus.controllers;
 
+import com.example.vidaplus.domain.consulta.Consulta;
+import com.example.vidaplus.domain.exception.RequisicaoInvalidaException;
 import com.example.vidaplus.domain.prescricao.Prescricao;
 import com.example.vidaplus.domain.prescricao.PrescricaoRequestDTO;
 import com.example.vidaplus.domain.user.User;
+import com.example.vidaplus.repositories.ConsultaRepository;
 import com.example.vidaplus.repositories.PrescricaoRepository;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -22,6 +25,8 @@ public class PrescricaoController {
 
     @Autowired
     private PrescricaoRepository repository;
+    @Autowired
+    private ConsultaRepository consultaRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(PrescricaoController.class);
     @PostMapping
@@ -31,7 +36,10 @@ public class PrescricaoController {
         User userDetails = (User) authentication.getPrincipal();
         String username = userDetails.getUsername();
 
-        Prescricao prescricao = new Prescricao(dto);
+        Consulta consulta = consultaRepository.findById(dto.consultaId())
+                .orElseThrow(() -> new RequisicaoInvalidaException("Consulta não localizada."));
+
+        Prescricao prescricao = new Prescricao(dto,consulta);
         repository.save(prescricao);
         logger.info("Usuario {} emitiu uma prescrição para a consulta com id {}",username,dto.consultaId());
         return ResponseEntity.ok().build();

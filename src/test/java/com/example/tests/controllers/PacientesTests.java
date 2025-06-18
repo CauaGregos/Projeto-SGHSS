@@ -55,7 +55,8 @@ public class PacientesTests {
                    "cpf": "string",
                    "dataNascimento": "2025-06-09",
                    "telefone": "string",
-                   "email": "string"
+                   "email": "string",
+                   "user_id": 1
                  }
             """))
                 .andExpect(status().isOk());
@@ -82,7 +83,8 @@ public class PacientesTests {
                    "cpf": "string",
                    "dataNascimento": "2025-06-09",
                    "telefone": "string",
-                   "email": "string"
+                   "email": "string",
+                   "user_id": 1
                  }
             """))
                 .andExpect(status().isForbidden());

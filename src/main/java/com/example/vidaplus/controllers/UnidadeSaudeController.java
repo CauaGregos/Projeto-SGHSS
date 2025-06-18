@@ -1,6 +1,5 @@
 package com.example.vidaplus.controllers;
-
-import com.example.vidaplus.domain.product.ProductResponseDTO;
+import com.example.vidaplus.domain.exception.RequisicaoInvalidaException;
 import com.example.vidaplus.domain.unidadeSaude.UnidadeSaude;
 import com.example.vidaplus.domain.unidadeSaude.UnidadeSaudeRequestDTO;
 import com.example.vidaplus.domain.unidadeSaude.UnidadeSaudeResponseDTO;
@@ -44,6 +43,9 @@ public class UnidadeSaudeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userDetails = (User) authentication.getPrincipal();
         String username = userDetails.getUsername();
+
+        UnidadeSaude unidadeSaude = repository.findById(id)
+                .orElseThrow(() -> new RequisicaoInvalidaException("Unidade de saúde não encontrada"));
 
         repository.deleteById(id);
         logger.info("Usuario {} deletou a unidade de saude {}", username, id);

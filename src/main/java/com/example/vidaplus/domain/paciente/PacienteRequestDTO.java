@@ -8,5 +8,5 @@ public record PacienteRequestDTO(
         LocalDate dataNascimento,
         String telefone,
         String email,
-        long user_id
+        String user_id
 ) {}

@@ -1,9 +1,11 @@
 package com.example.vidaplus.controllers;
 
+import com.example.vidaplus.domain.exception.RequisicaoInvalidaException;
 import com.example.vidaplus.domain.profissional.ProfissionalSaude;
 import com.example.vidaplus.domain.profissional.ProfissionalSaudeResponseDTO;
 import com.example.vidaplus.domain.user.User;
 import com.example.vidaplus.repositories.ProfissionalRepository;
+import com.example.vidaplus.repositories.UserRepository;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,8 @@ public class ProfissionalController {
 
     @Autowired
     private ProfissionalRepository repository;
+    @Autowired
+    private UserRepository userRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(ProfissionalController.class);
 
@@ -31,6 +35,9 @@ public class ProfissionalController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userDetails = (User) authentication.getPrincipal();
         String username = userDetails.getUsername();
+
+        var user = userRepository.findById(dto.user_id())
+                .orElseThrow(() -> new RequisicaoInvalidaException("Usuario não encontrado, tente novamente"));
 
         ProfissionalSaude profissional = new ProfissionalSaude(dto);
         repository.save(profissional);

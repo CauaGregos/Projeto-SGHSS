@@ -51,7 +51,7 @@ public class ConsultaTests {
                         .content("""
                 {
                     "pacienteId": 1,
-                    "profissionalId": 2,
+                    "profissionalId": 1,
                     "dataHora": "2025-06-10T10:00:00"
                 }
             """))
@@ -65,7 +65,7 @@ public class ConsultaTests {
                         .content("""
                 {
                     "pacienteId": 1,
-                    "profissionalId": 2,
+                    "profissionalId": 1,
                     "dataHora": "2025-06-10T10:00:00"
                 }
             """))
